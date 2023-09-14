@@ -1,0 +1,175 @@
+---
+title: "HW1 - Yatin Obili"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+date: "2023-08-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question 1
+
+
+a)
+
+```{r, q1}
+
+ (8 + 9) - (7 / 3 ^ (.3))
+
+```
+
+b)
+
+```{r, q2}
+
+ log(sqrt((15 + 16) / (14 + 12)), base = 2)
+
+```
+
+c)
+
+```{r, q3}
+
+((11 + sin(pi/4)) / (factorial(3) + abs(-10)))^2
+
+```
+
+
+## Question 2.
+
+a)
+```{r question2a}
+RF = c(2.60, 3.05, 3.74, 3.48, 5.49, 4.25, 2.57, 2.18, 3.14, 4.82, 3.28, 3.01)
+```
+
+b)
+```{r question2b}
+names(RF) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+```
+
+c)
+```{r question2c}
+average <- mean(RF)
+rounded.average <- round(average, 2)
+```
+
+d)
+```{r question2d}
+minRF <- which.min(RF)
+maxRF <- which.max(RF)
+
+names(maxRF)
+names(minRF)
+```
+
+
+## Question 3.
+
+a)
+```{r question3a}
+H2 <- c(2700, 2600, 3050, 2900, 3000, 2500, 2600, 3000, 2800, 3200, 2800, 3400)
+```
+
+b)
+```{r question3b}
+names(H2) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+```
+
+c)
+```{r question3c}
+total <- sum(H2)
+print(total)
+```
+
+d)
+```{r question3d}
+diff_H2 <- diff(H2)
+
+min <- which.min(diff_H2)
+max <- which.max(diff_H2)
+print(min)
+print(max)
+```
+
+
+## Question 4.
+
+a)
+
+```{r question4a}
+x <- c(1, -2, 3, -4, 5, 100)
+y <- x * -1
+y [ y > 0 ]
+
+```
+
+b)
+```{r question4b}
+# create a sequence from 1 to 50
+z <- seq (1, 50)
+# test whether an observation is even
+even <- z %% 2 == 0
+# subset z by the test above
+z = z[even]
+```
+
+c)
+```{r question4c}
+Mean <- function (x) {
+sum (x) / length (x)
+}
+```
+
+
+## Question 5.
+```{r question5}
+perfect_squres <- NULL
+PrintSquare <- function(){
+  for (i in 1:1000){
+    sqrt.i <- sqrt(i)
+    
+    if (sqrt.i == floor(sqrt.i)){
+      perfect_squres <- c (perfect_squres, i)
+    }
+  }
+  print(perfect_squres)
+}
+
+PrintSquare()
+
+```
+
+## Question 6.
+```{r question6}
+
+
+
+list.twin.primes = function (n) {
+  is.prime <- rep (TRUE , n )
+  is.prime [1] <- FALSE
+    if ( n > 2) {
+      for ( i in 3 : n ) {
+          is.prime [ i ] <- TRUE ;
+          for ( j in 2 : ( i - 1) ) {
+              if ( i %% j == 0) {
+                is.prime [ i ] <- FALSE
+                break
+        }
+    }
+  }
+}
+prime.list <- c(which(is.prime))
+
+for (i in 1:(length(prime.list) - 1)) { 
+    if (prime.list[i + 1] - prime.list[i] == 2) { 
+      cat("Twin prime pair:", prime.list[i], "and", prime.list[i + 1], "\n") } } }
+
+#for example
+list.twin.primes(100)
+
+
+```
