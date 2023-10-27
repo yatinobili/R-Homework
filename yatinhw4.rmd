@@ -1,0 +1,286 @@
+---
+title: "HW4 - Yatin Obili"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+date: "2023-10-26"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## QUESTION 1
+
+```{r}
+# Set your working directory
+setwd("C:/Users/yatin/Downloads/data analysis")
+
+# Read the mobile data from the CSV file
+mobile_data <- read.csv("train.csv")
+
+# Load the ggplot2 package if you haven't already
+library(ggplot2)
+```
+
+a)
+```{r aa}
+scatter_plot <- ggplot(mobile_data, aes(x = battery_power, y = ram, color = factor(price_range))) +
+  geom_point() +
+  labs(
+    x = "Battery Power",
+    y = "RAM",
+    color = "Price Range"
+  ) +
+    theme_minimal() +
+  ggtitle("Battery Power vs RAM by Price Range")
+
+
+print(scatter_plot)
+```
+
+b)
+```{r bb}
+trend_plot <- ggplot(mobile_data, aes(x = battery_power, y = ram, color = factor(price_range))) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(
+    x = "Battery Power",
+    y = "RAM",
+    color = "Price Range"
+  ) +
+    theme_minimal() +
+  ggtitle("Battery Power vs RAM by Price Range with Trends")
+
+
+print(trend_plot)
+```
+
+c)
+```{r cc}
+density_plot <- ggplot(mobile_data, aes(x = ram, fill = factor(price_range))) +
+  geom_density(alpha = 0.6) + 
+  labs(
+    x = "RAM",
+    y = "Density",
+    fill = "Price Range"
+  ) +
+    theme_minimal() +
+  ggtitle("Available RAM by Price Range")
+
+print(density_plot)
+```
+
+d)
+```{r dd}
+boxplot <- ggplot(mobile_data, aes(x = factor(price_range), y = ram, fill = factor(price_range))) +
+  geom_boxplot() +
+  labs(
+    x = "Price Range",
+    y = "RAM",
+    fill = "Price Range"
+  ) +
+    theme_minimal() +
+  ggtitle("Boxplot of RAM by Price Range")
+
+print(boxplot)
+```
+
+e)
+```{r ee}
+violin_plot <- ggplot(mobile_data, aes(x = factor(price_range), y = ram, fill = factor(price_range))) +
+  geom_violin() + 
+  labs(
+    x = "Price Range",
+    y = "RAM",
+    fill = "Price Range"
+  ) +
+    theme_minimal() +
+  ggtitle("Violin Plot of RAM by Price Range")
+
+print(violin_plot)
+```
+
+f)
+```{r ff}
+mobile_data$log_ram <- round(log2(mobile_data$ram))
+
+ggplot(mobile_data, aes(x = factor(price_range), fill = factor(log_ram))) +
+geom_bar() +
+labs(title = "Stacked Bar Plot of Price Range by Log2(RAM)", x = "Price Range", y = "Cou
+6
+nt")
+```
+
+
+
+
+## QUESTION 2
+
+```{r cars}
+
+library (UsingR)
+
+data("UScereal")
+
+```
+
+a)
+```{r a}
+levels(UScereal$mfr) <- c("General Mills","Kelloggs","Nabisco","Post","Quaker Oats","Ralston Purina")
+
+levels(UScereal$mfr)
+```
+
+b)
+```{r b}
+
+UScereal$shelf <- factor(UScereal$shelf)
+
+levels(UScereal$shelf) <- c("low","middle","upper")
+
+levels(UScereal$shelf)
+
+```
+
+
+c)
+```{r c}
+UScereal$Product <- rownames(UScereal)
+
+str(UScereal$Product)
+```
+
+
+d)
+```{r d}
+nutrition_facts <- c("protein", "fat", "sodium", "fibre", "carbo", "sugars", "potassium")
+
+correlations <- numeric(length(nutrition_facts))
+names(correlations) <- nutrition_facts
+
+for (fact in nutrition_facts) {
+  correlations[fact] <- cor(UScereal$calories, UScereal[[fact]], method = 'pearson')
+}
+
+print(correlations)
+
+```
+
+e)
+```{r e}
+library(ggplot2)
+
+ordered_correlations <- sort(correlations, decreasing = TRUE)
+
+df <- data.frame(Fact = names(ordered_correlations), Correlation = ordered_correlations)
+
+ggplot(df, aes(x = reorder(Fact, Correlation), y = Correlation)) + 
+  geom_bar(stat = "identity") +
+  coord_flip() + 
+  labs(title = "Correlation of Nutrition Facts with Calories",
+       x = "Nutrition Facts",
+       y = "Correlation Coefficient") +
+  theme_minimal()
+
+highest_fact <- names(ordered_correlations)[1]
+print(highest_fact)
+
+```
+
+f)
+```{r f}
+library(ggplot2)
+ggplot(UScereal, aes_string(x = highest_fact, y = "calories")) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") + 
+  labs(title = paste("Scatter Plot of Calories vs", highest_fact),
+       x = highest_fact,
+       y = "Calories") +
+  theme_minimal()
+
+model <- lm(calories ~ UScereal[[highest_fact]], data = UScereal)
+coefficients <- coef(model)
+
+coefficients[1]
+
+coefficients[2]
+
+```
+
+The Intercept represents the estimated number of calories when the value of carbo is at zero.
+
+The Slope represents the estimated increase in calories per one-unit increase in carbo.
+
+g)
+```{r g}
+subset_data <- UScereal[UScereal$mfr %in% c("General Mills", "Kelloggs"), ]
+
+ggplot(subset_data, aes(x = calories, fill = mfr)) + 
+  geom_density(alpha = 0.5) + 
+  labs(title = "Density Curves of Calories for General Mills vs Kelloggs",
+       x = "Calories",
+       y = "Density") +
+  theme_minimal() +
+  scale_fill_manual(values = c("General Mills" = "blue", "Kelloggs" = "red"))
+
+```
+
+Both plots skew to left showing that both companies have cereals with around the same calories, but general General Mills peaks higher at a lower calorie number and doesn't have as wide of a spread as Kelloggs, showing that they do not have as much variability in caloric values.
+
+```{r h}
+ggplot(subset_data, aes(x = mfr, y = calories, fill = mfr)) + 
+  geom_boxplot() + 
+  labs(title = "Boxplot of Calories for General Mills vs Kelloggs",
+       x = "Manufacturer",
+       y = "Calories") +
+  theme_minimal()+
+  scale_fill_manual(values = c("General Mills" = "blue", "Kelloggs" = "red"))
+```
+
+Both companies have a close median line, and heavy overlap in the interquartile ranges, which shows similarity in the calories between the two. The calories are NOT significantly different.
+
+i)
+```{r i}
+library(tidyverse)
+library(ggplot2)
+
+long_data <- UScereal %>%
+  select(mfr, protein, fat, sodium, fibre, carbo, sugars, potassium) %>%
+  pivot_longer(cols = -mfr, names_to = "nutrition_fact", values_to = "value")
+
+ggplot(long_data, aes(x = mfr, y = value, fill = mfr)) + 
+  geom_boxplot() + 
+  facet_wrap(~nutrition_fact, scales = "free_y") + 
+  labs(title = "Boxplots of Nutrition Facts Across Manufacturers",
+       x = "Manufacturer",
+       y = "Value") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Based on this data, it can be assumed that Nabisco aims for the healthiest diet. They have the lowest amount of sugars and sodium, while also being the highest in potassium, fibre, and protein. This is generally indicative of healthier foods, so the assumption can be made Nabisco is the most health conscious out of the manufactures.
+
+j)
+```{r j}
+library(ggplot2)
+
+color_palette <- c("General Mills" = "#FFD700", 
+                   "Kelloggs" = "#C0C0C0", 
+                   "Nabisco" = "#CD853F", 
+                   "Post" = "#8B4513", 
+                   "Quaker Oats" = "#2E8B57", 
+                   "Realston Purina" = "#4682B4")
+
+ggplot(UScereal, aes(x = factor(shelf), fill = mfr)) + 
+  geom_bar(position = "stack") + 
+  scale_fill_manual(values = color_palette) + 
+  labs(title = "Relationship Between Manufacturer and Shelf Placement",
+       x = "Shelf Placement",
+       y = "Count",
+       fill = "Manufacturer") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
